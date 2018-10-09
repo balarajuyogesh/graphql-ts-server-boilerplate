@@ -52,3 +52,27 @@ npm start
   "include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }
 ```
+
+- Setup tslint
+
+```bash
+npm i --save-dev tslint tslint-config-prettier
+```
+
+```json
+// source: tslint.json
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "jsRules": {},
+  "rules": {
+    "no-console": false,
+    "member-access": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "interface-name": false,
+    "no-submodule-imports": false
+  },
+  "rulesDirectory": []
+}
+```
