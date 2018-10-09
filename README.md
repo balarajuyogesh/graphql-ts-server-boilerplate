@@ -59,6 +59,8 @@ npm start
 npm i --save-dev tslint tslint-config-prettier
 ```
 
+> Reload the code editor the `tslint.json` is created.
+
 ```json
 // source: tslint.json
 {
@@ -74,5 +76,81 @@ npm i --save-dev tslint tslint-config-prettier
     "no-submodule-imports": false
   },
   "rulesDirectory": []
+}
+```
+
+- Remove the below code from `src/index.ts`
+
+```ts
+// Remove it to build our own tables
+import {createConnection} from "typeorm";
+import {User} from "./entity/User";
+
+createConnection().then(async connection => {
+
+    console.log("Inserting a new user into the database...");
+    const user = new User();
+    user.firstName = "Timber";
+    user.lastName = "Saw";
+    user.age = 25;
+    await connection.manager.save(user);
+    console.log("Saved a new user with id: " + user.id);
+    
+    console.log("Loading users from the database...");
+    const users = await connection.manager.find(User);
+    console.log("Loaded users: ", users);
+     
+    console.log("Here you can setup and run express/koa/any other framework.");
+    
+}).catch(error => console.log(error));
+```
+
+- Add the below piece of code into `src/index.ts`
+
+```ts
+// Source: src/index.ts
+import "reflect-metadata";
+
+import { GraphQLServer } from 'graphql-yoga'
+
+const typeDefs = `
+  type Query {
+    hello(name: String): String!
+  }
+`
+
+const resolvers = {
+  Query: {
+    hello: (_: any, { name }: any) => `Hello ${name || 'World'}`,
+  },
+}
+
+const server = new GraphQLServer({ typeDefs, resolvers })
+server.start(() => console.log('Server is running on localhost:4000'))
+```
+
+> Test with `yarn start`
+
+Goto `localhost:4000` and test the below query
+```
+{
+  hello
+}
+```
+
+
+```bash
+yarn add -D nodemon
+```
+
+- Update `package.json`. This listens for changes and reloads the server automaticallygit
+
+```json
+{
+  ...
+
+  "scripts": {
+      "start": "nodemon --exec ts-node src/index.ts"
+   }
 }
 ```
