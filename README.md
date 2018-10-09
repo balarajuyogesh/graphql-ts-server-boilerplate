@@ -154,3 +154,54 @@ yarn add -D nodemon
    }
 }
 ```
+
+## Creating TypeORM Entity Part 1
+
+[Reference](https://www.youtube.com/watch?v=-iwjiiCGiO0)
+
+- Right now we only have single entity `src/entity/User.ts`
+- We are going to start from this and add on to it
+
+> Each entity more or less correlates to a table in the database
+
+- Here we have a single table named `User` we will rename it as `Users`
+
+```ts
+// Source: src/entity/User.ts
+export class User {
+
+    // Numeric number which just increments
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    firstName: string;
+
+    @Column()
+    lastName: string;
+
+    @Column()
+    age: number;
+
+}
+// Changed to the below lines
+export class User {
+
+    // We shall add a library to automatically create uuid (npm i --save uuid)
+    // Better one because it hides ID people can't guess it Ex: acgsjavh16213 16-bit number
+    @PrimaryColumn("uuid")
+    id: string;
+
+    @Column()
+    firstName: string;
+
+    @Column()
+    lastName: string;
+
+    @Column()
+    age: number;
+
+}
+```
+
+- We shall add a library to automatically create uuid(npm i --save uuid or yarn add uuid)
